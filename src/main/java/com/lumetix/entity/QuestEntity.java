@@ -17,8 +17,6 @@ public class QuestEntity implements Serializable {
 
     private Boolean isProject;
 
-    private Long chatId;
-
     private String createAt;
 
     private String updateAt;
@@ -97,12 +95,5 @@ public class QuestEntity implements Serializable {
     public void setIsProject(Boolean project) {
         isProject = project;
     }
-
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
+    
 }

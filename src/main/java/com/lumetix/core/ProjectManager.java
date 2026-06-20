@@ -24,19 +24,17 @@ public class ProjectManager {
         QuestEntity queryCurProject = null;
         Boolean isProject = item.getIsProject();
         if (isProject) {
-            chatModel.setValue(false);
             queryCurProject = item;
             curTaskId.set(0);
         } else {
-            curTaskId.set(item.getId());
-            chatModel.setValue(true);
-            refreshChatDataByChatId(item.getChatId());
             queryCurProject = getJdbi().withHandle(handle ->
-                    Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE id = :id AND deleted_at IS NULL")
-                            .bind("id", item.getParentId())
+                    Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE parent_id = :parentId AND deleted_at IS NULL")
+                            .bind("parentId", item.getParentId())
                             .mapToBean(QuestEntity.class)
                             .findOne()
                             .orElse(null)));
+            refreshChatDataByChatId(item.getId());
+            curTaskId.set(item.getId());
         }
         Integer isExpand = getItemIsExpand(item);
         List<Long> ids = Arrays.asList(item.getId(), queryCurProject.getId());
@@ -50,7 +48,6 @@ public class ProjectManager {
         );
         curProjectTitle.setValue(queryCurProject.getTitle());
         curProject.set(queryCurProject.getId());
-
     }
 
     private static Integer getItemIsExpand(QuestEntity item) {
