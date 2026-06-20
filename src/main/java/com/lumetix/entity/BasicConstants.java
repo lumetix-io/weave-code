@@ -24,6 +24,7 @@ public interface BasicConstants {
         public static SimpleLongProperty curProject = new SimpleLongProperty(0);
         public static SimpleIntegerProperty treeListFresh = new SimpleIntegerProperty(0);
         public static SimpleStringProperty sendMsg = new SimpleStringProperty("");
+        public static SimpleIntegerProperty curTaskId = new SimpleIntegerProperty(0);
     }
 
     class ChatUi {

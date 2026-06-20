@@ -11,6 +11,7 @@ import java.util.Objects;
 import static com.lumetix.core.Chat.refreshChatDataByChatId;
 import static com.lumetix.core.Common.getSelectFolderPath;
 import static com.lumetix.core.DbManager.getJdbi;
+import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatModel;
 import static com.lumetix.entity.BasicConstants.InPutUi.*;
 
@@ -47,6 +48,7 @@ public class ProjectManager {
         );
         curProjectTitle.setValue(queryCurProject.getTitle());
         curProject.set(queryCurProject.getId());
+        curTaskId.set(0);
     }
 
     private static Integer getItemIsExpand(QuestEntity item) {
@@ -91,6 +93,7 @@ public class ProjectManager {
         curProject.set(projectId);
         treeListFresh.setValue(treeListFresh.getValue() + 1);
         chatModel.setValue(false);
+        chatList.clear();
     }
 
 

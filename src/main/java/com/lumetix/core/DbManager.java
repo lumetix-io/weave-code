@@ -27,6 +27,7 @@ public class DbManager {
                     CREATE TABLE IF NOT EXISTS quest_list (
                         id                 INTEGER PRIMARY KEY AUTOINCREMENT,
                         parent_id          INTEGER NOT NULL DEFAULT 0,
+                        chat_id            INTEGER NOT NULL DEFAULT 0,
                         title              TEXT,
                         absolute_full_path TEXT,
                         is_expand          INTEGER NOT NULL DEFAULT 0,

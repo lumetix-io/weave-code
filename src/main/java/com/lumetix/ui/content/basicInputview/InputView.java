@@ -2,13 +2,14 @@ package com.lumetix.ui.content.basicInputview;
 
 import atlantafx.base.theme.Styles;
 import com.lumetix.core.Chat;
-import com.lumetix.entity.ModelEnum;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -16,6 +17,7 @@ import javafx.scene.text.Text;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import static com.lumetix.core.ProjectManager.createProject;
 import static com.lumetix.entity.BasicConstants.InPutUi.*;
 import static com.lumetix.ui.basicui.BasicButton.newNoBorderButton;
 
@@ -58,7 +60,14 @@ public class InputView {
 
     private static HBox newInputModelHBox() {
         HBox hBox = new HBox();
-        hBox.getChildren().add(newModelComboBox());
+        hBox.getChildren().add(newModelSelectButton());
+
+        Separator separator = new Separator(Orientation.VERTICAL);
+        separator.setMaxHeight(5);
+        separator.getStyleClass().add(Styles.SMALL);
+        hBox.getChildren().add(separator);
+
+        hBox.getChildren().add(newCreateQuestButton());
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -70,12 +79,20 @@ public class InputView {
         return hBox;
     }
 
-    private static ComboBox<ModelEnum> newModelComboBox() {
-        ComboBox<ModelEnum> modelComboBox = newCommonComboBox();
-        modelComboBox.getItems().addAll(ModelEnum.values());
-        modelComboBox.setCellFactory(_ -> new InPutModelView());
-        modelComboBox.getSelectionModel().selectFirst();
-        return modelComboBox;
+    public static Button newCreateQuestButton() {
+        Button createQuestButton = newNoBorderButton();
+        createQuestButton.setText("DeepSeek V4Pro");
+        createQuestButton.getStyleClass().add(Styles.SMALL);
+        return createQuestButton;
+    }
+
+    public static Button newModelSelectButton() {
+        Button modelSelect = newNoBorderButton();
+        modelSelect.textProperty().bindBidirectional(curProjectTitle);
+        modelSelect.getStyleClass().add(Styles.SMALL);
+        modelSelect.setGraphic(new FontIcon(Feather.FOLDER_PLUS));
+        modelSelect.setOnAction(event -> createProject());
+        return modelSelect;
     }
 
     private static <T> ComboBox<T> newCommonComboBox() {

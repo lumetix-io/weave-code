@@ -13,7 +13,7 @@ import static com.lumetix.entity.BasicConstants.InPutUi.*;
 public class Chat {
 
 
-    private final static Integer ZERO_CHAT_ID = 0;
+    private final static Integer ZERO_ID = 0;
 
     public static void send() {
         long projectId = curProject.get();
@@ -21,7 +21,7 @@ public class Chat {
 
         //获取最新的聊天记录chatId
         int chatId = curChatId.get();
-        if (chatId == ZERO_CHAT_ID) {
+        if (chatId == ZERO_ID) {
             chatId = getNextChatId();
         }
         //获取用户发送记录，并且添加到聊天记录
@@ -31,24 +31,29 @@ public class Chat {
         if (projectId == 0) {
             robotAnswer(chatId);
         } else {
-            QuestEntity task = new QuestEntity();
-            task.setIsExpand(false);
-            task.setChatId(chatId);
-            task.setIsProject(true);
-            task.setTitle(sendMsg.getValue());
-            task.setAbsoluteFullPath("");
-            task.setParentId(curProject.get());
-            task.setAbsoluteFullPath("");
-            getJdbi().useHandle(handle ->
-                    handle.createUpdate("INSERT INTO quest_list (parent_id, chat_id, title, absolute_full_path, is_expand, is_project) VALUES (:parentId, :chatId, :title, :absoluteFullPath, :isExpand, :isProject)").
-                            bind("parentId", task.getParentId()).
-                            bind("chatId", task.getChatId()).
-                            bind("title", task.getTitle()).
-                            bind("absoluteFullPath", task.getAbsoluteFullPath()).
-                            bind("isExpand", task.getIsExpand() ? 1 : 0).
-                            bind("isProject", task.getIsProject() ? 1 : 0).
-                            execute());
-
+            int taskId = curTaskId.get();
+            if (ZERO_ID.equals(taskId)) {
+                QuestEntity task = new QuestEntity();
+                task.setIsExpand(false);
+                task.setChatId(chatId);
+                task.setIsProject(false);
+                task.setTitle(sendMsg.getValue());
+                task.setAbsoluteFullPath("");
+                task.setParentId(curProject.get());
+                task.setAbsoluteFullPath("");
+                long generatedTaskId = getJdbi().withHandle(handle ->
+                        handle.createUpdate("INSERT INTO quest_list (parent_id, chat_id, title, absolute_full_path, is_expand, is_project) VALUES (:parentId, :chatId, :title, :absoluteFullPath, :isExpand, :isProject)").
+                                bind("parentId", task.getParentId()).
+                                bind("chatId", task.getChatId()).
+                                bind("title", task.getTitle()).
+                                bind("absoluteFullPath", task.getAbsoluteFullPath()).
+                                bind("isExpand", task.getIsExpand() ? 1 : 0).
+                                bind("isProject", task.getIsProject() ? 1 : 0).
+                                executeAndReturnGeneratedKeys("id")
+                                .mapTo(Long.class)
+                                .one());
+                curTaskId.setValue(generatedTaskId);
+            }
             getJdbi().useHandle(handle ->
                     handle.createUpdate("INSERT INTO chat_detail (chat_id, type, content) VALUES (:chatId, :type, :content)").
                             bind("chatId", userSendChat.getChatId()).
@@ -59,6 +64,7 @@ public class Chat {
         isExecuteTask.set(false);
         sendMsg.set("");
         chatModel.setValue(true);
+        treeListFresh.setValue(treeListFresh.getValue() + 1);
     }
 
     private static void robotAnswer(int chatId) {

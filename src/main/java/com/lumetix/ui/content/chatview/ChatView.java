@@ -32,6 +32,9 @@ public class ChatView {
         listView.itemsProperty().bindBidirectional(chatList);
         listView.setCellFactory(param -> new ChatCell());
         listView.setBorder(Border.EMPTY);
+        listView.getStylesheets().add("data:text/css," +
+                ".scroll-bar:vertical { -fx-opacity: 0; -fx-pref-width: 0; }"
+        );
         chatList.addListener((_, _, newValue) ->
                 listView.scrollTo(newValue.getLast()));
         return listView;
