@@ -26,7 +26,9 @@ public class ProjectManager {
         if (isProject) {
             chatModel.setValue(false);
             queryCurProject = item;
+            curTaskId.set(0);
         } else {
+            curTaskId.set(item.getId());
             chatModel.setValue(true);
             refreshChatDataByChatId(item.getChatId());
             queryCurProject = getJdbi().withHandle(handle ->
@@ -40,7 +42,7 @@ public class ProjectManager {
         List<Long> ids = Arrays.asList(item.getId(), queryCurProject.getId());
         getJdbi().useHandle(handle ->
                 handle.createUpdate(
-                                "UPDATE quest_list SET update_at = datetime('now', 'localtime'),is_project=1,is_expand=:isExpand WHERE id IN (<ids>) AND deleted_at IS NULL"
+                                "UPDATE quest_list SET update_at = datetime('now', 'localtime'),is_expand=:isExpand WHERE id IN (<ids>) AND deleted_at IS NULL"
                         )
                         .bindList("ids", ids)
                         .bind("isExpand", isExpand)
@@ -48,12 +50,12 @@ public class ProjectManager {
         );
         curProjectTitle.setValue(queryCurProject.getTitle());
         curProject.set(queryCurProject.getId());
-        curTaskId.set(0);
+
     }
 
     private static Integer getItemIsExpand(QuestEntity item) {
         Boolean isProject = item.getIsProject();
-        if (Boolean.TRUE.equals(isProject)) {
+        if (!Boolean.TRUE.equals(isProject)) {
             return 0;
         }
         Boolean isExpand = item.getIsExpand();

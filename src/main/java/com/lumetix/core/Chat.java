@@ -13,14 +13,14 @@ import static com.lumetix.entity.BasicConstants.InPutUi.*;
 public class Chat {
 
 
-    private final static Integer ZERO_ID = 0;
+    private final static Long ZERO_ID = 0L;
 
     public static void send() {
         long projectId = curProject.get();
         isExecuteTask.set(true);
 
         //获取最新的聊天记录chatId
-        int chatId = curChatId.get();
+        Long chatId = curChatId.get();
         if (chatId == ZERO_ID) {
             chatId = getNextChatId();
         }
@@ -31,7 +31,7 @@ public class Chat {
         if (projectId == 0) {
             robotAnswer(chatId);
         } else {
-            int taskId = curTaskId.get();
+            long taskId = curTaskId.get();
             if (ZERO_ID.equals(taskId)) {
                 QuestEntity task = new QuestEntity();
                 task.setIsExpand(false);
@@ -67,15 +67,15 @@ public class Chat {
         treeListFresh.setValue(treeListFresh.getValue() + 1);
     }
 
-    private static void robotAnswer(int chatId) {
+    private static void robotAnswer(Long chatId) {
         ChatDetail chatDetail = new ChatDetail();
-        chatDetail.setChatId(0);
+        chatDetail.setChatId(0L);
         chatDetail.setType(ChatEnum.ROBOT.name());
         chatDetail.setContent("请先选择您的项目");
         chatList.getValue().add(chatDetail);
     }
 
-    private static ChatDetail getUserSendChat(int chatId) {
+    private static ChatDetail getUserSendChat(Long chatId) {
         ChatDetail chatDetail = new ChatDetail();
         chatDetail.setChatId(chatId);
         chatDetail.setType(ChatEnum.USER.name());
@@ -83,14 +83,17 @@ public class Chat {
         return chatDetail;
     }
 
-    private static int getNextChatId() {
-        Integer maxId = getJdbi().withHandle(handle -> handle.createQuery("SELECT MAX(id) FROM chat").mapTo(Integer.class).findOne().orElse(0));
+    private static Long getNextChatId() {
+        Long maxId = getJdbi().withHandle(handle -> handle.createQuery("SELECT MAX(id) FROM chat").mapTo(Long.class).findOne().orElse(0L));
         return maxId + 1;
     }
 
-    public static void refreshChatDataByChatId(Integer chatId) {
+    public static void refreshChatDataByChatId(Long chatId) {
         curChatId.setValue(chatId);
-        List<ChatDetail> detailList = getJdbi().withHandle(handle -> handle.createQuery("SELECT * FROM chat_detail WHERE chat_id = :chatId AND deleted_at IS NULL ORDER BY create_at ASC").bind("chat_id", chatId).mapToBean(ChatDetail.class).list());
+        List<ChatDetail> detailList = getJdbi().withHandle(handle ->
+                handle.createQuery("SELECT * FROM chat_detail WHERE chat_id = :chatId AND deleted_at IS NULL ORDER BY create_at ASC").
+                        bind("chatId", chatId).
+                        mapToBean(ChatDetail.class).list());
         chatList.setAll(detailList);
     }
 }

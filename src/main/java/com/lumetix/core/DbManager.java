@@ -41,7 +41,6 @@ public class DbManager {
             handle.execute("""
                     CREATE TABLE IF NOT EXISTS chat (
                         id          INTEGER PRIMARY KEY AUTOINCREMENT,
-                        chat_id     INTEGER,
                         model       TEXT,
                         version     TEXT,
                         create_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),

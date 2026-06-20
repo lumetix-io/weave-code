@@ -44,7 +44,7 @@ public class LeftMenuUI {
         TreeView<QuestEntity> treeView = new TreeView<>();
         treeView.setShowRoot(false);
         treeView.getStyleClass().addAll(Styles.SMALL, Styles.ACCENT);
-        treeView.setCellFactory(_ -> new QuestTreeView());
+        treeView.setCellFactory(_ -> new QuestCell());
         treeView.setStyle(
                 "-fx-border-color: transparent; " +
                         "-fx-focus-color: transparent; " +

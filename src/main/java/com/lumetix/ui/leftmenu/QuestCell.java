@@ -14,9 +14,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import static com.lumetix.core.ProjectManager.itemClick;
 
 
-public class QuestTreeView extends TreeCell<QuestEntity> {
+public class QuestCell extends TreeCell<QuestEntity> {
 
-    public QuestTreeView() {
+    public QuestCell() {
         this.setStyle("-fx-background-color: transparent; -fx-indent: 0;");
     }
 

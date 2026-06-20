@@ -24,12 +24,12 @@ public interface BasicConstants {
         public static SimpleLongProperty curProject = new SimpleLongProperty(0);
         public static SimpleIntegerProperty treeListFresh = new SimpleIntegerProperty(0);
         public static SimpleStringProperty sendMsg = new SimpleStringProperty("");
-        public static SimpleIntegerProperty curTaskId = new SimpleIntegerProperty(0);
+        public static SimpleLongProperty curTaskId = new SimpleLongProperty(0);
     }
 
     class ChatUi {
         public static final SimpleListProperty<ChatDetail> chatList = new SimpleListProperty<>(FXCollections.observableArrayList());
-        public static final SimpleIntegerProperty curChatId = new SimpleIntegerProperty();
+        public static final SimpleLongProperty curChatId = new SimpleLongProperty(0L);
         public static final SimpleBooleanProperty chatModel = new SimpleBooleanProperty(false);
     }
 

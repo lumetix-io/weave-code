@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 public class Chat implements Serializable {
 
-    private Integer id;
-
-    private Integer chatId;
+    private Long id;
 
     private String model;
 
@@ -18,22 +16,13 @@ public class Chat implements Serializable {
 
     private String deleteTime;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
-    public Integer getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Integer chatId) {
-        this.chatId = chatId;
-    }
-
 
     public String getCreateTime() {
         return createTime;

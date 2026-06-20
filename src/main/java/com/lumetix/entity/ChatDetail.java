@@ -3,9 +3,9 @@ package com.lumetix.entity;
 import java.io.Serializable;
 
 public class ChatDetail implements Serializable {
-    private Integer id;
+    private Long id;
 
-    private Integer chatId;
+    private Long chatId;
 
     private String type;
 
@@ -17,20 +17,20 @@ public class ChatDetail implements Serializable {
 
     private String deletedAt;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
-    public void setChatId(Integer chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getType() {
