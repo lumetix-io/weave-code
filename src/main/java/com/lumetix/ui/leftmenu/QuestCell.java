@@ -4,6 +4,7 @@ import com.lumetix.entity.tree.QuestEntity;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.TreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -41,6 +42,8 @@ public class QuestCell extends TreeCell<QuestEntity> {
             hBox.getChildren().add(new Circle(2.5, Color.GRAY));
         }
         Label title = new Label(item.getTitle());
+        title.setTextOverrun(OverrunStyle.ELLIPSIS);
+        title.setMaxWidth(120);
         title.setAlignment(Pos.CENTER_LEFT);
         hBox.getChildren().add(title);
         this.setGraphic(hBox);
