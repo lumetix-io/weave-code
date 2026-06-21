@@ -18,6 +18,7 @@ import java.util.Optional;
 import static com.lumetix.core.ProjectManager.getQuestTreeData;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatModel;
+import static com.lumetix.entity.BasicConstants.InPutUi.curTaskId;
 import static com.lumetix.entity.BasicConstants.InPutUi.treeListFresh;
 
 public class LeftMenuUI {
@@ -35,6 +36,7 @@ public class LeftMenuUI {
         createQuestButton.setOnAction(_ -> {
             chatModel.setValue(false);
             chatList.clear();
+            curTaskId.setValue(0);
         });
         return createQuestButton;
     }
