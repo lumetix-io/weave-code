@@ -70,22 +70,6 @@ public class ProjectManager {
                         execute());
     }
 
-//    private static Integer getItemIsExpand(QuestEntity item) {
-//
-//        if (!PROJECT.name().equals(item.getType())) {
-//            return 0;
-//        }
-//        String expand = item.getExpand();
-//        if (Objects.isNull(expand) || expand.isEmpty()) {
-//            return 0;
-//        }
-//        ProjectNode projectNode = deserializeFromString(expand);
-//        if (Objects.isNull(projectNode)) {
-//            return 0;
-//        }
-//        Boolean isExpand = projectNode.getIsExpand();
-//        return Boolean.TRUE.equals(isExpand) ? 1 : 0;
-//    }
 
     public static void createProject() {
 
