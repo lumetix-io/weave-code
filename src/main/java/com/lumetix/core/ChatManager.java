@@ -37,8 +37,8 @@ public class ChatManager {
                 task.setTitle(sendMsg.getValue());
                 task.setParentId(curProject.get());
                 taskId = getJdbi().withHandle(handle ->
-                        handle.createUpdate("INSERT INTO quest_list (parent_id, chat_id, title, type) " +
-                                        "VALUES (:parentId, :chatId, :title, :type)").
+                        handle.createUpdate("INSERT INTO quest_list (parent_id, title, type) " +
+                                        "VALUES (:parentId, :title, :type)").
                                 bind("parentId", task.getParentId()).
                                 bind("title", task.getTitle()).
                                 bind("type", task.getType()).

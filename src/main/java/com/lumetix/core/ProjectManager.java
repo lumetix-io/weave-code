@@ -31,13 +31,14 @@ public class ProjectManager {
             curTaskId.set(0);
         } else {
             queryCurProject = getJdbi().withHandle(handle ->
-                    Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE parent_id = :parentId AND deleted_at IS NULL").
+                    Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE id = :parentId AND deleted_at IS NULL").
                             bind("parentId",
                                     item.getParentId()).
                             mapToBean(QuestEntity.class).
                             findOne().orElse(null)));
             refreshChatDataByChatId(item.getId());
             curTaskId.set(item.getId());
+            chatModel.setValue(true);
         }
         List<Long> ids = Arrays.asList(item.getId(), queryCurProject.getId());
         getJdbi().useHandle(handle ->
@@ -74,6 +75,7 @@ public class ProjectManager {
         QuestEntity project = new QuestEntity();
         project.setParentId(-1L);
         project.setTitle(selectFolder.getName());
+        project.setType(PROJECT.name());
 
 
         ProjectNode projectNode = new ProjectNode();
@@ -103,13 +105,6 @@ public class ProjectManager {
         List<QuestEntity> questEntities = getJdbi().withHandle(handle -> handle.createQuery("SELECT * FROM quest_list WHERE deleted_at IS NULL ORDER BY update_at DESC").mapToBean(QuestEntity.class).list());
         if (Objects.isNull(questEntities) || questEntities.isEmpty()) {
             return new ArrayList<>();
-        }
-
-        //设置当前project
-        QuestEntity firstProject = findFirstProject(questEntities);
-        if (Objects.nonNull(firstProject)) {
-            curProject.setValue(firstProject.getId());
-            curProjectTitle.setValue(firstProject.getTitle());
         }
         QuestEntity root = new QuestEntity();
         root.setId(-1L);

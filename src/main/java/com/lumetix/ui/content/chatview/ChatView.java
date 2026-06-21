@@ -7,6 +7,8 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
+import java.util.Objects;
+
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.InPutUi.TEXTAREA_WIDTH;
 import static com.lumetix.ui.content.basicInputview.InputView.newInputViewWithBorder;
@@ -36,7 +38,16 @@ public class ChatView {
                 ".scroll-bar:vertical { -fx-opacity: 0; -fx-pref-width: 0; }"
         );
         chatList.addListener((_, _, newValue) ->
-                listView.scrollTo(newValue.getLast()));
+        {
+            if (newValue.isEmpty()) {
+                return;
+            }
+            ChatDetail last = newValue.getLast();
+            if (Objects.isNull(last)) {
+                return;
+            }
+            listView.scrollTo(last);
+        });
         return listView;
     }
 }
