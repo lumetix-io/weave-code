@@ -1,6 +1,7 @@
 package com.lumetix.ui.leftmenu;
 
 import atlantafx.base.theme.Styles;
+import com.lumetix.entity.tree.ProjectNode;
 import com.lumetix.entity.tree.QuestEntity;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -16,10 +17,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.lumetix.core.ProjectManager.getQuestTreeData;
+import static com.lumetix.core.SerializationUtil.deserializeFromString;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatModel;
 import static com.lumetix.entity.BasicConstants.InPutUi.curTaskId;
 import static com.lumetix.entity.BasicConstants.InPutUi.treeListFresh;
+import static com.lumetix.entity.tree.TreeNodeType.PROJECT;
 
 public class LeftMenuUI {
 
@@ -106,9 +109,18 @@ public class LeftMenuUI {
             if (parentEntity.getId() != null && parentEntity.getId().equals(entity.getParentId())) {
                 TreeItem<QuestEntity> childNode = new TreeItem<>(entity);
                 parent.getChildren().add(childNode);
-//                if (Boolean.TRUE.equals(entity.getIsExpand())) {
-//                    childNode.setExpanded(true);
-//                }
+
+                //设置节点状态
+                String expand = entity.getExpand();
+                if (!(Objects.isNull(expand) || expand.isEmpty())
+                        && PROJECT.name().equals(entity.getType())) {
+                    ProjectNode projectNode = deserializeFromString(expand);
+                    if (Objects.nonNull(projectNode)) {
+                        childNode.setExpanded(projectNode.getIsExpand());
+                    }
+                }
+
+
                 buildChildren(childNode, allEntities);
             }
         }

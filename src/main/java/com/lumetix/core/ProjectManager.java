@@ -31,6 +31,7 @@ public class ProjectManager {
             curTaskId.set(0);
             chatList.clear();
             chatModel.set(false);
+            updateProjectExpand(item);
         } else {
             queryCurProject = getJdbi().withHandle(handle ->
                     Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE id = :parentId AND deleted_at IS NULL").
@@ -51,22 +52,40 @@ public class ProjectManager {
         curProject.set(queryCurProject.getId());
     }
 
-    private static Integer getItemIsExpand(QuestEntity item) {
-
-        if (!PROJECT.name().equals(item.getType())) {
-            return 0;
-        }
+    private static void updateProjectExpand(QuestEntity item) {
         String expand = item.getExpand();
         if (Objects.isNull(expand) || expand.isEmpty()) {
-            return 0;
+            return;
         }
         ProjectNode projectNode = deserializeFromString(expand);
         if (Objects.isNull(projectNode)) {
-            return 0;
+            return;
         }
-        Boolean isExpand = projectNode.getIsExpand();
-        return Boolean.TRUE.equals(isExpand) ? 1 : 0;
+        projectNode.setIsExpand(!projectNode.getIsExpand());
+        item.setExpand(SerializationUtil.serializeToString(projectNode));
+        getJdbi().useHandle(handle ->
+                handle.createUpdate("UPDATE quest_list SET expand = :expand WHERE id = :id").
+                        bind("expand", item.getExpand()).
+                        bind("id", item.getId()).
+                        execute());
     }
+
+//    private static Integer getItemIsExpand(QuestEntity item) {
+//
+//        if (!PROJECT.name().equals(item.getType())) {
+//            return 0;
+//        }
+//        String expand = item.getExpand();
+//        if (Objects.isNull(expand) || expand.isEmpty()) {
+//            return 0;
+//        }
+//        ProjectNode projectNode = deserializeFromString(expand);
+//        if (Objects.isNull(projectNode)) {
+//            return 0;
+//        }
+//        Boolean isExpand = projectNode.getIsExpand();
+//        return Boolean.TRUE.equals(isExpand) ? 1 : 0;
+//    }
 
     public static void createProject() {
 
