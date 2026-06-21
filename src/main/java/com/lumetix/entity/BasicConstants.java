@@ -1,5 +1,6 @@
 package com.lumetix.entity;
 
+import com.lumetix.entity.chat.ChatDetail;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 

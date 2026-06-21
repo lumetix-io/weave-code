@@ -1,8 +1,8 @@
 package com.lumetix.core;
 
-import com.lumetix.entity.ChatDetail;
-import com.lumetix.entity.ChatEnum;
-import com.lumetix.entity.QuestEntity;
+import com.lumetix.entity.chat.ChatDetail;
+import com.lumetix.entity.chat.ChatEnum;
+import com.lumetix.entity.tree.QuestEntity;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatModel;
 import static com.lumetix.entity.BasicConstants.InPutUi.*;
 
-public class Chat {
+public class ChatManager {
 
 
     private final static Long ZERO_ID = 0L;
@@ -32,19 +32,16 @@ public class Chat {
         } else {
             if (ZERO_ID.equals(taskId)) {
                 QuestEntity task = new QuestEntity();
-                task.setIsExpand(false);
-                task.setIsProject(false);
+
+                task.setType("TASK");
                 task.setTitle(sendMsg.getValue());
-                task.setAbsoluteFullPath("");
                 task.setParentId(curProject.get());
-                task.setAbsoluteFullPath("");
                 taskId = getJdbi().withHandle(handle ->
-                        handle.createUpdate("INSERT INTO quest_list (parent_id, chat_id, title, absolute_full_path, is_expand, is_project) VALUES (:parentId, :chatId, :title, :absoluteFullPath, :isExpand, :isProject)").
+                        handle.createUpdate("INSERT INTO quest_list (parent_id, chat_id, title, type) " +
+                                        "VALUES (:parentId, :chatId, :title, :type)").
                                 bind("parentId", task.getParentId()).
                                 bind("title", task.getTitle()).
-                                bind("absoluteFullPath", task.getAbsoluteFullPath()).
-                                bind("isExpand", task.getIsExpand() ? 1 : 0).
-                                bind("isProject", task.getIsProject() ? 1 : 0).
+                                bind("type", task.getType()).
                                 executeAndReturnGeneratedKeys("id")
                                 .mapTo(Long.class)
                                 .one());
@@ -84,10 +81,6 @@ public class Chat {
         return chatDetail;
     }
 
-    private static Long getNextChatId() {
-        Long maxId = getJdbi().withHandle(handle -> handle.createQuery("SELECT MAX(id) FROM chat").mapTo(Long.class).findOne().orElse(0L));
-        return maxId + 1;
-    }
 
     public static void refreshChatDataByChatId(Long chatId) {
         List<ChatDetail> detailList = getJdbi().withHandle(handle ->
@@ -97,4 +90,6 @@ public class Chat {
         chatList.clear();
         chatList.setAll(detailList);
     }
+
+
 }

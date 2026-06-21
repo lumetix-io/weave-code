@@ -1,4 +1,4 @@
-package com.lumetix.entity;
+package com.lumetix.entity.chat;
 
 import java.io.Serializable;
 

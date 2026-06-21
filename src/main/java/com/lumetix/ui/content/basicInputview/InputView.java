@@ -1,7 +1,7 @@
 package com.lumetix.ui.content.basicInputview;
 
 import atlantafx.base.theme.Styles;
-import com.lumetix.core.Chat;
+import com.lumetix.core.ChatManager;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -141,7 +141,7 @@ public class InputView {
             Feather icon = isExecuteTask.get() ? Feather.STOP_CIRCLE : Feather.SEND;
             return FontIcon.of(icon);
         }, isExecuteTask));
-        send.setOnAction(_ -> Chat.send());
+        send.setOnAction(_ -> ChatManager.send());
         return send; // ← 原代码还缺少 return 语句
     }
 }

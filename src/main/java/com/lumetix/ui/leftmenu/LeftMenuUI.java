@@ -1,7 +1,7 @@
 package com.lumetix.ui.leftmenu;
 
 import atlantafx.base.theme.Styles;
-import com.lumetix.entity.QuestEntity;
+import com.lumetix.entity.tree.QuestEntity;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -104,9 +104,9 @@ public class LeftMenuUI {
             if (parentEntity.getId() != null && parentEntity.getId().equals(entity.getParentId())) {
                 TreeItem<QuestEntity> childNode = new TreeItem<>(entity);
                 parent.getChildren().add(childNode);
-                if (Boolean.TRUE.equals(entity.getIsExpand())) {
-                    childNode.setExpanded(true);
-                }
+//                if (Boolean.TRUE.equals(entity.getIsExpand())) {
+//                    childNode.setExpanded(true);
+//                }
                 buildChildren(childNode, allEntities);
             }
         }

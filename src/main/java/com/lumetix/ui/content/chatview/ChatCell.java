@@ -1,7 +1,7 @@
 package com.lumetix.ui.content.chatview;
 
-import com.lumetix.entity.ChatDetail;
-import com.lumetix.entity.ChatEnum;
+import com.lumetix.entity.chat.ChatDetail;
+import com.lumetix.entity.chat.ChatEnum;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;

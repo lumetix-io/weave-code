@@ -1,6 +1,6 @@
-package com.lumetix.entity;
+package com.lumetix.entity.model;
 
-public enum ModelEnum {
+public enum ModelVersionEnum {
     DEEP_SEEK("DeepSeek", "DeepSeek"),
     KIMI("Kimi", "Kimi"),
     QIANWEN("Qianwen", "Qianwen"),
@@ -9,7 +9,7 @@ public enum ModelEnum {
     private final String code;
     private final String desc;
 
-    ModelEnum(String code, String desc) {
+    ModelVersionEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -21,4 +21,5 @@ public enum ModelEnum {
     public String getDesc() {
         return desc;
     }
+
 }

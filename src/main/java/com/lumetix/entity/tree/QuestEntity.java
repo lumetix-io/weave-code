@@ -1,4 +1,4 @@
-package com.lumetix.entity;
+package com.lumetix.entity.tree;
 
 import java.io.Serializable;
 
@@ -11,11 +11,12 @@ public class QuestEntity implements Serializable {
 
     private String title;
 
-    private String absoluteFullPath;
+    /**
+     * 类型PROJECT / TASK
+     */
+    private String type;
 
-    private Boolean isExpand;
-
-    private Boolean isProject;
+    private String expand;
 
     private String createAt;
 
@@ -71,29 +72,19 @@ public class QuestEntity implements Serializable {
         this.parentId = parentId;
     }
 
-    public String getAbsoluteFullPath() {
-        return absoluteFullPath;
+    public String getType() {
+        return type;
     }
 
-    public void setAbsoluteFullPath(String absoluteFullPath) {
-        this.absoluteFullPath = absoluteFullPath;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public Boolean getIsExpand() {
-        return isExpand;
+    public String getExpand() {
+        return expand;
     }
 
-    public void setIsExpand(Boolean expand) {
-        isExpand = expand;
+    public void setExpand(String expand) {
+        this.expand = expand;
     }
-
-
-    public Boolean getIsProject() {
-        return isProject;
-    }
-
-    public void setIsProject(Boolean project) {
-        isProject = project;
-    }
-    
 }

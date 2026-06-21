@@ -16,4 +16,7 @@ module com.lumetix.weave_code {
     exports com.lumetix.ai to javafx.graphics;
     exports com.lumetix.ai.assistant to javafx.graphics;
     opens com.lumetix.entity to org.jdbi.v3.core;
+    opens com.lumetix.entity.tree to org.jdbi.v3.core;
+    opens com.lumetix.entity.chat to org.jdbi.v3.core;
+    opens com.lumetix.entity.model to org.jdbi.v3.core;
 }

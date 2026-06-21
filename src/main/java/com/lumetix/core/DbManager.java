@@ -27,26 +27,15 @@ public class DbManager {
                     CREATE TABLE IF NOT EXISTS quest_list (
                         id                 INTEGER PRIMARY KEY AUTOINCREMENT,
                         parent_id          INTEGER NOT NULL DEFAULT 0,
+                        type               TEXT,
                         title              TEXT,
-                        absolute_full_path TEXT,
-                        is_expand          INTEGER NOT NULL DEFAULT 0,
-                        is_project         INTEGER NOT NULL DEFAULT 0,
+                        expand             TEXT,
                         create_at          TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
                         update_at          TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
                         deleted_at         TEXT
                     );
                     """);
 
-            handle.execute("""
-                    CREATE TABLE IF NOT EXISTS chat (
-                        id          INTEGER PRIMARY KEY AUTOINCREMENT,
-                        model       TEXT,
-                        version     TEXT,
-                        create_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-                        update_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-                        delete_time TEXT
-                    );
-                    """);
 
             handle.execute("""
                     CREATE TABLE IF NOT EXISTS chat_detail (

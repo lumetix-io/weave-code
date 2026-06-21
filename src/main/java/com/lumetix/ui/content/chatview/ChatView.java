@@ -1,6 +1,6 @@
 package com.lumetix.ui.content.chatview;
 
-import com.lumetix.entity.ChatDetail;
+import com.lumetix.entity.chat.ChatDetail;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Border;

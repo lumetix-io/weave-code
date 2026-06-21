@@ -1,6 +1,6 @@
 package com.lumetix.ui.leftmenu;
 
-import com.lumetix.entity.QuestEntity;
+import com.lumetix.entity.tree.QuestEntity;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -12,6 +12,7 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static com.lumetix.core.ProjectManager.itemClick;
+import static com.lumetix.entity.tree.TreeNodeType.PROJECT;
 
 
 public class QuestCell extends TreeCell<QuestEntity> {
@@ -34,7 +35,7 @@ public class QuestCell extends TreeCell<QuestEntity> {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setSpacing(5);
-        if (Boolean.TRUE.equals(item.getIsProject())) {
+        if (PROJECT.name().equals(item.getType())) {
             hBox.getChildren().add(new FontIcon(Feather.FOLDER));
         } else {
             hBox.getChildren().add(new Circle(2.5, Color.GRAY));
