@@ -77,7 +77,6 @@ public class ProjectManager {
 
 
         ProjectNode projectNode = new ProjectNode();
-        projectNode.setProjectId(project.getId());
         projectNode.setAbsoluteFullPath(selectFolder.getAbsolutePath());
         projectNode.setIsExpand(true);
         project.setExpand(SerializationUtil.serializeToString(projectNode));
@@ -85,8 +84,8 @@ public class ProjectManager {
 
         long projectId = getJdbi().withHandle(handle ->
                 handle.createUpdate(
-                                "INSERT INTO quest_list (parent_id, title, expand) " +
-                                        "VALUES (:parentId, :title, :expand)").
+                                "INSERT INTO quest_list (parent_id, title, type, expand) " +
+                                        "VALUES (:parentId, :title, :type,:expand)").
                         bind("parentId", project.getParentId()).
                         bind("title", project.getTitle()).
                         bind("type", project.getType()).
