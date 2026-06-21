@@ -29,6 +29,8 @@ public class ProjectManager {
         if (PROJECT.name().equals(nodeType)) {
             queryCurProject = item;
             curTaskId.set(0);
+            chatList.clear();
+            chatModel.set(false);
         } else {
             queryCurProject = getJdbi().withHandle(handle ->
                     Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE id = :parentId AND deleted_at IS NULL").
