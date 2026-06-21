@@ -31,7 +31,7 @@ public class ProjectManager {
             curTaskId.set(0);
             chatList.clear();
             chatModel.set(false);
-            updateProjectExpand(item);
+            // updateProjectExpand(item);
         } else {
             queryCurProject = getJdbi().withHandle(handle ->
                     Objects.requireNonNull(handle.createQuery("SELECT * FROM quest_list WHERE id = :parentId AND deleted_at IS NULL").
@@ -52,7 +52,7 @@ public class ProjectManager {
         curProject.set(queryCurProject.getId());
     }
 
-    private static void updateProjectExpand(QuestEntity item) {
+    public static void updateProjectExpand(QuestEntity item, Boolean isExpand) {
         String expand = item.getExpand();
         if (Objects.isNull(expand) || expand.isEmpty()) {
             return;
@@ -61,7 +61,7 @@ public class ProjectManager {
         if (Objects.isNull(projectNode)) {
             return;
         }
-        projectNode.setIsExpand(!projectNode.getIsExpand());
+        projectNode.setIsExpand(isExpand);
         item.setExpand(SerializationUtil.serializeToString(projectNode));
         getJdbi().useHandle(handle ->
                 handle.createUpdate("UPDATE quest_list SET expand = :expand WHERE id = :id").

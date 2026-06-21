@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.lumetix.core.ProjectManager.getQuestTreeData;
+import static com.lumetix.core.ProjectManager.updateProjectExpand;
 import static com.lumetix.core.SerializationUtil.deserializeFromString;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.ChatUi.chatModel;
@@ -109,6 +110,13 @@ public class LeftMenuUI {
             if (parentEntity.getId() != null && parentEntity.getId().equals(entity.getParentId())) {
                 TreeItem<QuestEntity> childNode = new TreeItem<>(entity);
                 parent.getChildren().add(childNode);
+
+                //给project节点设置🚢事件
+                if (PROJECT.name().equals(entity.getType())) {
+                    childNode.expandedProperty().addListener((_, oldValue, newValue) -> {
+                        updateProjectExpand(entity, newValue);
+                    });
+                }
 
                 //设置节点状态
                 String expand = entity.getExpand();
