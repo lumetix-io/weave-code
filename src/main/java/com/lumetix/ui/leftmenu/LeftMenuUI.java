@@ -45,6 +45,18 @@ public class LeftMenuUI {
         return createQuestButton;
     }
 
+    public static Button newSelectModelButton() {
+        Button selectModel = new Button("DeepSeek V4Pro", new FontIcon(Feather.ZAP));
+        selectModel.setText("DeepSeek V4Pro");
+        selectModel.setMaxWidth(Double.MAX_VALUE);
+        selectModel.setAlignment(Pos.CENTER_LEFT);
+        selectModel.setCursor(Cursor.HAND);
+        selectModel.getStyleClass().addAll(
+                Styles.FLAT,
+                Styles.ACCENT
+        );
+        return selectModel;
+    }
 
     public static TreeView<QuestEntity> newQuestTreeView() {
         TreeView<QuestEntity> treeView = new TreeView<>();

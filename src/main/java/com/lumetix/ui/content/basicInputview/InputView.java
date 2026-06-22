@@ -4,10 +4,8 @@ import atlantafx.base.theme.Styles;
 import com.lumetix.core.ChatManager;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import org.kordamp.ikonli.feather.Feather;
@@ -58,12 +56,12 @@ public class InputView {
         HBox hBox = new HBox();
         hBox.getChildren().add(newCreateProjectButton());
 
-        Separator separator = new Separator(Orientation.VERTICAL);
-        separator.setMaxHeight(5);
-        separator.getStyleClass().add(Styles.SMALL);
-        hBox.getChildren().add(separator);
+//        Separator separator = new Separator(Orientation.VERTICAL);
+//        separator.setMaxHeight(5);
+//        separator.getStyleClass().add(Styles.SMALL);
+//        hBox.getChildren().add(separator);
 
-        hBox.getChildren().add(newSelectModelButton());
+//        hBox.getChildren().add(newSelectModelButton());
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -75,12 +73,6 @@ public class InputView {
         return hBox;
     }
 
-    public static Button newSelectModelButton() {
-        Button createQuestButton = newNoBorderButton();
-        createQuestButton.setText("DeepSeek V4Pro");
-        createQuestButton.getStyleClass().add(Styles.SMALL);
-        return createQuestButton;
-    }
 
     public static Button newCreateProjectButton() {
         Button modelSelect = newNoBorderButton();
