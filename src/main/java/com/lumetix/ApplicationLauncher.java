@@ -5,7 +5,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static com.lumetix.entity.BasicConstants.MainUi.*;
+import static com.lumetix.entity.BasicConstants.MainUi.HEIGHT;
+import static com.lumetix.entity.BasicConstants.MainUi.WIDTH;
 import static com.lumetix.ui.MainUI.newMainUI;
 
 public class ApplicationLauncher extends Application {
@@ -20,7 +21,7 @@ public class ApplicationLauncher extends Application {
     public void start(Stage primaryStage) {
         ApplicationLauncher.primaryStage = primaryStage;
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-        primaryStage.setTitle(TITLE + " " + VERSION);
+//        primaryStage.setTitle(TITLE + " " + VERSION);
         primaryStage.setWidth(WIDTH);
         primaryStage.setHeight(HEIGHT);
         Scene scene = new Scene(newMainUI());
