@@ -48,6 +48,18 @@ public class DbManager {
                         deleted_at TEXT
                     );
                     """);
+
+            handle.execute("""
+                    CREATE TABLE IF NOT EXISTS model (
+                          id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                          name        TEXT    NOT NULL,
+                          version     TEXT    NOT NULL,
+                          api_key     TEXT    NOT NULL,
+                          create_at   TEXT,
+                          update_at   TEXT,
+                          deleted_at  TEXT
+                      );
+                    """);
         });
     }
 

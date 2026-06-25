@@ -10,6 +10,7 @@ module com.lumetix.weave_code {
     requires org.jdbi.v3.core;
     requires java.desktop;
     requires com.google.gson;
+    requires langchain4j.core;
 
     // 导出包给 JavaFX 使用
     exports com.lumetix to javafx.graphics;
@@ -19,4 +20,6 @@ module com.lumetix.weave_code {
     opens com.lumetix.entity.tree to org.jdbi.v3.core;
     opens com.lumetix.entity.chat to org.jdbi.v3.core;
     opens com.lumetix.entity.model to org.jdbi.v3.core;
+    exports com.lumetix.ai.assistant.factory to javafx.graphics;
+    exports com.lumetix.ai.assistant.embed to javafx.graphics;
 }
