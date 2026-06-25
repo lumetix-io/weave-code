@@ -9,7 +9,7 @@ public class Common {
 
     public static File getSelectFolderPath() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("选择文件夹之之");
+        directoryChooser.setTitle("选择文件夹");
         directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         return directoryChooser.showDialog(ApplicationLauncher.primaryStage);
     }

@@ -2,8 +2,8 @@ package com.lumetix.entity.model;
 
 public enum ModelEnum {
 
-    QIANWEN37MAX("qwen", "qwen3.7-max"),
-    QIANWEN35FLASH("qwen", "qwen3.5-flash"),
+    QIANWEN37MAX("qianwen", "qwen3.7-max"),
+    QIANWEN35FLASH("qianwen", "qwen3.5-flash"),
     DEEPSEEKV4PRO("deepseek", "deepseek-v4-pro"),
     ;
     private final String model;
