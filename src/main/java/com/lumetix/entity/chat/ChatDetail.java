@@ -11,6 +11,8 @@ public class ChatDetail implements Serializable {
 
     private String content;
 
+    private String uuid;
+
     private String createAt;
 
     private String updateAt;
@@ -71,5 +73,13 @@ public class ChatDetail implements Serializable {
 
     public void setDeletedAt(String deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

@@ -11,6 +11,7 @@ module com.lumetix.weave_code {
     requires java.desktop;
     requires com.google.gson;
     requires langchain4j.core;
+    requires javafx.web;
 
     // 导出包给 JavaFX 使用
     exports com.lumetix to javafx.graphics;

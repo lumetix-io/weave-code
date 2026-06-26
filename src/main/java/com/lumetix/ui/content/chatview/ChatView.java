@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import java.util.Objects;
 
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
+import static com.lumetix.entity.BasicConstants.ChatUi.chatViewRefresh;
 import static com.lumetix.entity.BasicConstants.InPutUi.TEXTAREA_WIDTH;
 import static com.lumetix.ui.content.basicInputview.InputView.newInputViewWithBorder;
 
@@ -33,6 +34,7 @@ public class ChatView {
         ListView<ChatDetail> listView = new ListView<>();
         listView.itemsProperty().bindBidirectional(chatList);
         listView.setCellFactory(param -> new ChatCell());
+
         listView.setBorder(Border.EMPTY);
         listView.getStylesheets().add("data:text/css," +
                 ".scroll-bar:vertical { -fx-opacity: 0; -fx-pref-width: 0; }"
@@ -48,6 +50,7 @@ public class ChatView {
             }
             listView.scrollTo(last);
         });
+        chatViewRefresh.addListener((observable, oldValue, newValue) -> listView.refresh());
         return listView;
     }
 }

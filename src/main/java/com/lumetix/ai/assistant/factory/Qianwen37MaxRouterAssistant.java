@@ -15,12 +15,12 @@ public class Qianwen37MaxRouterAssistant implements IChatAssistant {
     }
 
     @Override
-    public RouterChatAssistant getChatAssistant(String appiKey) {
+    public UserFaceChatAssistant getChatAssistant(String appiKey) {
         StreamingChatModel streamingChatModel = QwenStreamingChatModel.builder()
                 .apiKey(appiKey)
                 .modelName("qwen3.7-max")
                 .build();
-        return AiServices.builder(RouterChatAssistant.class)
+        return AiServices.builder(UserFaceChatAssistant.class)
                 .streamingChatModel(streamingChatModel)
                 // .tools(new TicketToolManager())
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder().id(memoryId).maxMessages(1000).build())

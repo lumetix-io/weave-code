@@ -43,6 +43,7 @@ public class DbManager {
                         chat_id    INTEGER,
                         type       TEXT,
                         content    TEXT,
+                        uuid    TEXT,
                         create_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
                         update_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
                         deleted_at TEXT

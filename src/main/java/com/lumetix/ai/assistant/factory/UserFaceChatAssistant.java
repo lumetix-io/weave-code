@@ -7,7 +7,7 @@ import dev.langchain4j.service.V;
 
 import java.time.LocalDate;
 
-public interface RouterChatAssistant {
+public interface UserFaceChatAssistant {
 
     @SystemMessage("""
             # Role: Code Agent Task Router & Tool Orchestrator

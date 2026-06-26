@@ -7,5 +7,5 @@ public interface IChatAssistant {
 
     ModelEnum getModelType();
 
-    RouterChatAssistant getChatAssistant(String appiKey);
+    UserFaceChatAssistant getChatAssistant(String appiKey);
 }

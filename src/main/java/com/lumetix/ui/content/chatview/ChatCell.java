@@ -5,6 +5,7 @@ import com.lumetix.entity.chat.ChatEnum;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.web.WebView;
 
 import java.util.Objects;
 
@@ -19,13 +20,16 @@ public class ChatCell extends ListCell<ChatDetail> {
             return;
         }
         String type = item.getType();
-        Label chatLabel = new Label(item.getContent());
-        chatLabel.setAlignment(Pos.CENTER);
         if (type.equals(ChatEnum.USER.name())) {
-            this.setAlignment(Pos.CENTER_RIGHT);
+            Label chatLabel = new Label(item.getContent());
+            chatLabel.setAlignment(Pos.CENTER);
+            setGraphic(chatLabel);
         } else {
-            this.setAlignment(Pos.CENTER_LEFT);
+            WebView webView = new WebView();
+            webView.getEngine().loadContent(item.getContent());
+            setGraphic(webView);
+            setAlignment(Pos.CENTER_LEFT);
         }
-        setGraphic(chatLabel);
+
     }
 }

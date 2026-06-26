@@ -32,6 +32,10 @@ public interface BasicConstants {
         public static final SimpleListProperty<ChatDetail> chatList = new SimpleListProperty<>(FXCollections.observableArrayList());
         // public static final SimpleLongProperty curChatId = new SimpleLongProperty(0L);
         public static final SimpleBooleanProperty chatModel = new SimpleBooleanProperty(false);
+
+        public static final SimpleStringProperty chatSendUUid = new SimpleStringProperty();
+
+        public static final SimpleLongProperty chatViewRefresh = new SimpleLongProperty(0L);
     }
 
 }

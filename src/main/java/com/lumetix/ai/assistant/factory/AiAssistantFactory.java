@@ -15,7 +15,7 @@ public class AiAssistantFactory {
     }
 
 
-    public static RouterChatAssistant newChatAssistant(ModelEnum modelEnum) {
+    public static UserFaceChatAssistant newChatAssistant(ModelEnum modelEnum) {
         Map<ModelEnum, IChatAssistant> assistantMap = Map.of(
                 ModelEnum.QIANWEN37MAX, new Qianwen37MaxRouterAssistant()
         );
