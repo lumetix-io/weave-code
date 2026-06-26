@@ -26,7 +26,7 @@ public class ChatManager {
             return;
         }
         if (isExecuteTask.get()) {
-            isExecuteTask.set(false);
+            //  isExecuteTask.set(false);
             return;
         }
         isExecuteTask.set(true);
@@ -84,15 +84,18 @@ public class ChatManager {
             ChatDetail last = chatList.getLast();
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
-                last.setContent(last.getContent() + response);
+                last.setContent(response);
                 chatViewRefresh.set(chatViewRefresh.getValue() + 1);
             } else {
                 ChatDetail robotChat = getRobotChat(response);
                 chatList.addLast(robotChat);
+                isExecuteTask.set(false);
             }
         }).onCompleteResponse(response -> {
             robotAnswer(response.aiMessage().text());
-        }).onError(Throwable::printStackTrace).start();
+        }).onError(e -> {
+            isExecuteTask.set(false);
+        }).start();
     }
 
     private static ChatDetail getRobotChat(String content) {
