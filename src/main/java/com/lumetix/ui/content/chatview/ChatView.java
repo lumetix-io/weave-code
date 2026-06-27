@@ -2,6 +2,7 @@ package com.lumetix.ui.content.chatview;
 
 import com.lumetix.entity.chat.ChatDetail;
 import com.lumetix.entity.chat.ChatEnum;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
@@ -80,11 +81,29 @@ public class ChatView {
                     String html = RENDERER.render(document);
 
                     WebView webView = new WebView();
-                    webView.getEngine().loadContent(html);
+                    webView.setPrefWidth(CHAT_VIEW_WIDTH);
+                    webView.setMaxWidth(CHAT_VIEW_WIDTH);
+                    webView.setMinWidth(CHAT_VIEW_WIDTH);
+                    String fullHtml = "<html><head><style>"
+                            + "body { margin: 0; padding: 8px; font-size: 14px; overflow: hidden; }"
+                            + "img { max-width: 100%; height: auto; }"
+                            + "pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }"
+                            + "table { max-width: 100%; word-break: break-all; }"
+                            + "</style></head><body><div id='content'>" + html + "</div></body></html>";
+                    webView.getEngine().loadContent(fullHtml);
                     webView.getEngine().getLoadWorker().stateProperty().addListener((obs, o, n) -> {
-                        if (n == Worker.State.SUCCEEDED)
-                            webView.setPrefHeight(((Number) webView.getEngine()
-                                    .executeScript("document.body.scrollHeight")).doubleValue() + 10);
+                        if (n == Worker.State.SUCCEEDED) {
+                            Platform.runLater(() -> Platform.runLater(() -> {
+                                Object result = webView.getEngine()
+                                        .executeScript("document.getElementById('content').offsetHeight");
+                                if (result instanceof Number) {
+                                    double h = ((Number) result).doubleValue() + 16;
+                                    webView.setPrefHeight(h);
+                                    webView.setMinHeight(h);
+                                    webView.setMaxHeight(h);
+                                }
+                            }));
+                        }
                     });
                     vBox.getChildren().add(webView);
                 }
