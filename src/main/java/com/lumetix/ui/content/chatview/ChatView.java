@@ -86,7 +86,16 @@ public class ChatView {
 
     public static ScrollPane newChatView() {
         ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        StackPane stackPane = new StackPane();
+        stackPane.setAlignment(Pos.TOP_CENTER);
+//        stackPane.setBackground(Background.fill(Color.GREEN));
+//        scrollPane.setBackground(Background.fill(Color.BLUE));
+        // scrollPane.setMaxWidth(CHAT_VIEW_WIDTH);
         VBox vBox = new VBox();
+        vBox.setMaxWidth(CHAT_VIEW_WIDTH);
+        stackPane.getChildren().add(vBox);
+        vBox.setBackground(Background.fill(Color.TRANSPARENT));
         chatList.addListener((_, _, newValue) -> {
             if (newValue.isEmpty()) {
                 vBox.getChildren().clear();
@@ -153,7 +162,7 @@ public class ChatView {
                 }
             }
         });
-        scrollPane.setContent(vBox);
+        scrollPane.setContent(stackPane);
         return scrollPane;
     }
 
