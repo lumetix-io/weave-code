@@ -70,6 +70,7 @@ public class ChatView {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
                     TextArea textArea = new TextArea();
+                    textArea.setMaxWidth(CHAT_VIEW_WIDTH / 2);
                     textArea.setText(detail.getContent());
                     textArea.setEditable(false);
                     textArea.setBorder(Border.EMPTY);
@@ -112,27 +113,4 @@ public class ChatView {
         scrollPane.setContent(vBox);
         return scrollPane;
     }
-//    public static ListView<ChatDetail> newChatView() {
-//        ListView<ChatDetail> listView = new ListView<>();
-//        listView.itemsProperty().bindBidirectional(chatList);
-//        listView.setCellFactory(param -> new ChatCell());
-//
-//        listView.setBorder(Border.EMPTY);
-//        listView.getStylesheets().add("data:text/css," +
-//                ".scroll-bar:vertical { -fx-opacity: 0; -fx-pref-width: 0; }"
-//        );
-//        chatList.addListener((_, _, newValue) ->
-//        {
-//            if (newValue.isEmpty()) {
-//                return;
-//            }
-//            ChatDetail last = newValue.getLast();
-//            if (Objects.isNull(last)) {
-//                return;
-//            }
-//            listView.scrollTo(last);
-//        });
-//        chatViewRefresh.addListener((observable, oldValue, newValue) -> listView.refresh());
-//        return listView;
-//    }
 }
