@@ -6,12 +6,12 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import org.commonmark.Extension;
 import org.commonmark.ext.autolink.AutolinkExtension;
@@ -70,11 +70,27 @@ public class ChatView {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
                     TextArea textArea = new TextArea();
-                    textArea.setMaxWidth(CHAT_VIEW_WIDTH / 2);
                     textArea.setText(detail.getContent());
                     textArea.setEditable(false);
+                    textArea.setWrapText(true);
                     textArea.setBorder(Border.EMPTY);
-                    vBox.getChildren().add(textArea);
+                    textArea.setStyle(
+                            "-fx-background-color: #3498db;" +
+                            "-fx-background-radius: 16;" +
+                            "-fx-padding: 10 14 10 14;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-size: 14px;"
+                    );
+                    double textW = computeTextWidth(detail.getContent());
+                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
+                    double textH = computeTextHeight(detail.getContent(), bubbleW - 28);
+                    textArea.setPrefWidth(bubbleW);
+                    textArea.setMaxWidth(bubbleW);
+                    textArea.setPrefHeight(textH + 20);
+                    textArea.setMaxHeight(textH + 20);
+                    HBox bubbleBox = new HBox(textArea);
+                    bubbleBox.setAlignment(Pos.CENTER_RIGHT);
+                    vBox.getChildren().add(bubbleBox);
                 } else {
                     Node document = PARSER.parse(detail.getContent());
 
@@ -112,5 +128,24 @@ public class ChatView {
         });
         scrollPane.setContent(vBox);
         return scrollPane;
+    }
+
+    private static double computeTextWidth(String text) {
+        Text helper = new Text();
+        helper.setFont(Font.font(14));
+        double maxW = 0;
+        for (String line : text.split("\n")) {
+            helper.setText(line);
+            maxW = Math.max(maxW, helper.getLayoutBounds().getWidth());
+        }
+        return maxW;
+    }
+
+    private static double computeTextHeight(String text, double wrapWidth) {
+        Text helper = new Text();
+        helper.setFont(Font.font(14));
+        helper.setWrappingWidth(wrapWidth);
+        helper.setText(text);
+        return helper.getLayoutBounds().getHeight();
     }
 }
