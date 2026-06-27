@@ -22,7 +22,9 @@ public class ChatCell extends ListCell<ChatDetail> {
         String type = item.getType();
         if (type.equals(ChatEnum.USER.name())) {
             Label chatLabel = new Label(item.getContent());
-            chatLabel.setAlignment(Pos.CENTER);
+            //  chatLabel.setBackground(Background.fill(Color.RED));
+            //   chatLabel.setAlignment(Pos.CENTER_RIGHT);
+            setAlignment(Pos.CENTER_RIGHT);
             setGraphic(chatLabel);
         } else {
             WebView webView = new WebView();

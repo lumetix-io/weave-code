@@ -69,11 +69,14 @@ public class ChatManager {
         if (Objects.nonNull(robotChat)) {
             chatList.getValue().add(robotChat);
         }
-        snedMsg2Model();
         sendMsg.set("");
         curTaskId.set(taskId);
         chatModel.setValue(true);
         treeListFresh.setValue(treeListFresh.getValue() + 1);
+        if(projectId!=0){
+            snedMsg2Model();
+        }
+
     }
 
     private static void snedMsg2Model() {
@@ -89,10 +92,10 @@ public class ChatManager {
             } else {
                 ChatDetail robotChat = getRobotChat(response);
                 chatList.addLast(robotChat);
-                isExecuteTask.set(false);
             }
         }).onCompleteResponse(response -> {
             robotAnswer(response.aiMessage().text());
+            isExecuteTask.set(false);
         }).onError(e -> {
             isExecuteTask.set(false);
         }).start();
