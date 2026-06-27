@@ -2,6 +2,7 @@ package com.lumetix.ui.content.chatview;
 
 import com.lumetix.entity.chat.ChatDetail;
 import com.lumetix.entity.chat.ChatEnum;
+import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -58,6 +59,11 @@ public class ChatCell extends ListCell<ChatDetail> {
             WebView webView = new WebView();
             webView.setPrefWidth(this.getWidth());
             webView.getEngine().loadContent(html);
+            webView.getEngine().getLoadWorker().stateProperty().addListener((obs, o, n) -> {
+                if (n == Worker.State.SUCCEEDED)
+                    webView.setPrefHeight(((Number) webView.getEngine()
+                            .executeScript("document.body.scrollHeight")).doubleValue() + 10);
+            });
             setGraphic(webView);
             setAlignment(Pos.CENTER_LEFT);
         }
