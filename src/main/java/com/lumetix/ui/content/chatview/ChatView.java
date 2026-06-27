@@ -49,18 +49,6 @@ public class ChatView {
         RENDERER = HtmlRenderer.builder().extensions(extensions).build();
     }
 
-//    public static BorderPane newChatViewWrapper() {
-//        StackPane input = newInputViewWithBorder();
-//        BorderPane chatView = new BorderPane();
-//        chatView.setBottom(input);
-//        chatView.setCenter(newChatView());
-//        chatView.setMaxWidth(CHAT_VIEW_WIDTH);
-//
-//        chatView.setPadding(new Insets(10, 0, 10, 0));
-//        return chatView;
-//    }
-
-
     public static StackPane newChatViewWrapper() {
 
         StackPane rootContent = new StackPane();
@@ -74,11 +62,10 @@ public class ChatView {
         StackPane inputView = new StackPane();
         inputView.setAlignment(Pos.BOTTOM_CENTER);
         inputView.setBackground(Background.fill(Color.TRANSPARENT));
-        inputView.setMouseTransparent(true);
+//        inputView.setMouseTransparent(true);
         StackPane input = newInputViewWithBorder();
         input.setMaxWidth(TEXTAREA_WIDTH);
         input.setMaxHeight(TEXTAREA_HEIGHT);
-        input.setPickOnBounds(false);
         inputView.getChildren().add(input);
 
         rootContent.getChildren().add(inputView);
