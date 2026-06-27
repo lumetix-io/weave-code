@@ -108,21 +108,10 @@ public class ChatView {
             for (ChatDetail detail : changelist.getList()) {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
-                    double textW = computeTextWidth(detail.getContent());
-                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
+//                    double textW = computeTextWidth(detail.getContent());
+//                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
 
-                    Label label = new Label(detail.getContent());
-                    label.setWrapText(true);
-                    label.setMaxWidth(bubbleW);
-                    label.setStyle(
-                            "-fx-background-color: #F5F5F5;" +
-                                    "-fx-background-radius: 16;" +
-                                    "-fx-padding: 10 14 10 14;" +
-                                    "-fx-text-fill: #333333;" +
-                                    "-fx-font-size: 14px;"
-                    );
-                    HBox bubbleBox = new HBox(label);
-                    bubbleBox.setAlignment(Pos.CENTER_RIGHT);
+                    HBox bubbleBox = getHBox(detail);
                     vBox.getChildren().add(bubbleBox);
                 } else {
                     Node document = PARSER.parse(detail.getContent());
@@ -161,6 +150,22 @@ public class ChatView {
         });
         scrollPane.setContent(stackPane);
         return scrollPane;
+    }
+
+    private static HBox getHBox(ChatDetail detail) {
+        Label label = new Label(detail.getContent());
+        label.setWrapText(true);
+        label.setMaxWidth(TEXTAREA_WIDTH * 0.75);
+        label.setStyle(
+                "-fx-background-color: #F5F5F5;" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-padding: 10 14 10 14;" +
+                        "-fx-text-fill: #333333;" +
+                        "-fx-font-size: 14px;"
+        );
+        HBox bubbleBox = new HBox(label);
+        bubbleBox.setAlignment(Pos.CENTER_RIGHT);
+        return bubbleBox;
     }
 
     private static double computeTextWidth(String text) {

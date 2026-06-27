@@ -15,6 +15,7 @@ module com.lumetix.weave_code {
     requires org.commonmark.ext.gfm.tables;
     requires org.commonmark.ext.gfm.strikethrough;
     requires org.commonmark.ext.autolink;
+    requires org.jspecify;
 
     // 导出包给 JavaFX 使用
     exports com.lumetix to javafx.graphics;
