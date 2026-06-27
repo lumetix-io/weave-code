@@ -61,8 +61,7 @@ public class ChatView {
 
         StackPane inputView = new StackPane();
         inputView.setAlignment(Pos.BOTTOM_CENTER);
-        inputView.setBackground(Background.fill(Color.TRANSPARENT));
-//        inputView.setMouseTransparent(true);
+        inputView.setPickOnBounds(false);
         StackPane input = newInputViewWithBorder();
         input.setMaxWidth(TEXTAREA_WIDTH);
         input.setMaxHeight(TEXTAREA_HEIGHT);
