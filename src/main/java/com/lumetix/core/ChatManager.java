@@ -90,7 +90,7 @@ public class ChatManager {
             ChatDetail last = chatList.getLast();
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
-                last.setContent(response);
+                last.setContent(last.getContent() + response);
                 Platform.runLater(() -> chatViewRefresh.set(chatViewRefresh.getValue() + 1));
             } else {
                 ChatDetail robotChat = getRobotChat(response);
