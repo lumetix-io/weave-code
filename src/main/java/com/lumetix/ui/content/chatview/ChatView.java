@@ -16,8 +16,8 @@ import static com.lumetix.ui.content.basicInputview.InputView.newInputViewWithBo
 
 public class ChatView {
 
-
     private static final double CHAT_VIEW_WIDTH = TEXTAREA_WIDTH;
+
 
     public static BorderPane newChatViewWrapper() {
         StackPane input = newInputViewWithBorder();

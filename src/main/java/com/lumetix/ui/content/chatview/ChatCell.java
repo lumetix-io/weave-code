@@ -6,10 +6,33 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.web.WebView;
+import org.commonmark.Extension;
+import org.commonmark.ext.autolink.AutolinkExtension;
+import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
+import org.commonmark.ext.gfm.tables.TablesExtension;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ChatCell extends ListCell<ChatDetail> {
+
+    private static final Parser PARSER;
+    private static final HtmlRenderer RENDERER;
+
+    static {
+        List<Extension> extensions = Arrays.asList(
+                TablesExtension.create(),
+                StrikethroughExtension.create(),
+                AutolinkExtension.create()
+        );
+        PARSER = Parser.builder().extensions(extensions).build();
+        RENDERER = HtmlRenderer.builder().extensions(extensions).build();
+    }
+
 
     @Override
     protected void updateItem(ChatDetail item, boolean empty) {
@@ -27,8 +50,14 @@ public class ChatCell extends ListCell<ChatDetail> {
             setAlignment(Pos.CENTER_RIGHT);
             setGraphic(chatLabel);
         } else {
+            Node document = PARSER.parse(item.getContent());
+
+            // 5. 将 AST 渲染为 HTML 字符串
+            String html = RENDERER.render(document);
+
             WebView webView = new WebView();
-            webView.getEngine().loadContent(item.getContent());
+            webView.setPrefWidth(this.getWidth());
+            webView.getEngine().loadContent(html);
             setGraphic(webView);
             setAlignment(Pos.CENTER_LEFT);
         }

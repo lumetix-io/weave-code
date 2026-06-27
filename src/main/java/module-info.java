@@ -11,6 +11,10 @@ module com.lumetix.weave_code {
     requires java.desktop;
     requires langchain4j.core;
     requires javafx.web;
+    requires org.commonmark;
+    requires org.commonmark.ext.gfm.tables;
+    requires org.commonmark.ext.gfm.strikethrough;
+    requires org.commonmark.ext.autolink;
 
     // 导出包给 JavaFX 使用
     exports com.lumetix to javafx.graphics;
