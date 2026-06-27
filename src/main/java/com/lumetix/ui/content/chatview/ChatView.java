@@ -115,10 +115,10 @@ public class ChatView {
                     label.setWrapText(true);
                     label.setMaxWidth(bubbleW);
                     label.setStyle(
-                            "-fx-background-color: #3498db;" +
+                            "-fx-background-color: #F5F5F5;" +
                                     "-fx-background-radius: 16;" +
                                     "-fx-padding: 10 14 10 14;" +
-                                    "-fx-text-fill: white;" +
+                                    "-fx-text-fill: #333333;" +
                                     "-fx-font-size: 14px;"
                     );
                     HBox bubbleBox = new HBox(label);
