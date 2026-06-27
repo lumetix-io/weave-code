@@ -9,7 +9,6 @@ module com.lumetix.weave_code {
     requires com.zaxxer.hikari;
     requires org.jdbi.v3.core;
     requires java.desktop;
-    requires com.google.gson;
     requires langchain4j.core;
     requires javafx.web;
 

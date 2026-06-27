@@ -49,7 +49,11 @@ public class DbManager {
                         deleted_at TEXT
                     );
                     """);
-
+            handle.execute("""
+                    CREATE UNIQUE INDEX IF NOT EXISTS idx_chatid_uuid_type
+                    ON chat_detail(chat_id, type,uuid)
+                    WHERE  deleted_at IS NULL;
+                    """);
             handle.execute("""
                     CREATE TABLE IF NOT EXISTS model (
                           id          INTEGER PRIMARY KEY AUTOINCREMENT,

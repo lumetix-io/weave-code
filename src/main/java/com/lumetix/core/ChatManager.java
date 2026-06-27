@@ -5,10 +5,12 @@ import com.lumetix.entity.chat.ChatDetail;
 import com.lumetix.entity.chat.ChatEnum;
 import com.lumetix.entity.model.ModelEnum;
 import com.lumetix.entity.tree.QuestEntity;
+import javafx.application.Platform;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.lumetix.ai.assistant.factory.AiAssistantFactory.newChatAssistant;
 import static com.lumetix.core.DbManager.getJdbi;
@@ -29,6 +31,7 @@ public class ChatManager {
             //  isExecuteTask.set(false);
             return;
         }
+        chatSendUUid.set(UUID.randomUUID().toString());
         isExecuteTask.set(true);
         long projectId = curProject.get();
         //获取最新的聊天记录chatId
@@ -38,7 +41,7 @@ public class ChatManager {
         ChatDetail robotChat = null;
         ChatDetail userSendChat = getUserSendChat(taskId);
         if (projectId == 0) {
-            robotChat = robotAnswer(taskId);
+            robotChat = saveRobotAnswer(taskId);
             isExecuteTask.set(false);
         } else {
             if (ZERO_ID.equals(taskId)) {
@@ -69,35 +72,37 @@ public class ChatManager {
         if (Objects.nonNull(robotChat)) {
             chatList.getValue().add(robotChat);
         }
+        String userMsg = sendMsg.get();
         sendMsg.set("");
         curTaskId.set(taskId);
         chatModel.setValue(true);
         treeListFresh.setValue(treeListFresh.getValue() + 1);
-        if(projectId!=0){
-            snedMsg2Model();
+        if (projectId != 0) {
+            snedMsg2Model(userMsg);
         }
 
     }
 
-    private static void snedMsg2Model() {
+    private static void snedMsg2Model(String msg) {
         String uuid = chatSendUUid.get();
-        String msg = sendMsg.get();
         UserFaceChatAssistant userFaceChatAssistant = newChatAssistant(ModelEnum.QIANWEN37MAX);
         userFaceChatAssistant.chat(msg, LocalDate.now()).onPartialResponse(response -> {
             ChatDetail last = chatList.getLast();
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
                 last.setContent(response);
-                chatViewRefresh.set(chatViewRefresh.getValue() + 1);
+                Platform.runLater(() -> chatViewRefresh.set(chatViewRefresh.getValue() + 1));
             } else {
                 ChatDetail robotChat = getRobotChat(response);
-                chatList.addLast(robotChat);
+                Platform.runLater(() -> chatList.addLast(robotChat));
             }
         }).onCompleteResponse(response -> {
-            robotAnswer(response.aiMessage().text());
+            saveRobotAnswer(response.aiMessage().text());
             isExecuteTask.set(false);
+            System.out.println("=======>," + response.aiMessage().text());
         }).onError(e -> {
-            isExecuteTask.set(false);
+            System.out.println("-------->" + e.getMessage());
+            Platform.runLater(() -> isExecuteTask.set(false));
         }).start();
     }
 
@@ -112,13 +117,13 @@ public class ChatManager {
         return chatDetail;
     }
 
-    private static ChatDetail robotAnswer(String content) {
+    private static ChatDetail saveRobotAnswer(String content) {
         ChatDetail chatDetail = getRobotChat(content);
         getJdbi().useHandle(handle ->
                 handle.createUpdate("""
                                 INSERT INTO chat_detail (chat_id, type, content, uuid)
                                 VALUES (:chatId, :type, :content, :uuid)
-                                ON CONFLICT(chat_id, type) WHERE type = 'ROBOT' AND deleted_at IS NULL
+                                ON CONFLICT(chat_id, type,uuid) WHERE type = 'ROBOT' AND deleted_at IS NULL
                                 DO UPDATE SET content = :content, uuid = :uuid, update_at = datetime('now', 'localtime')
                                 """)
                         .bind("chatId", chatDetail.getChatId())
@@ -129,7 +134,7 @@ public class ChatManager {
         return chatDetail;
     }
 
-    private static ChatDetail robotAnswer(Long chatId) {
+    private static ChatDetail saveRobotAnswer(Long chatId) {
         ChatDetail chatDetail = new ChatDetail();
         chatDetail.setChatId(chatId);
         chatDetail.setType(ChatEnum.ROBOT.name());
