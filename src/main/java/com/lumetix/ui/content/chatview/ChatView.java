@@ -6,9 +6,12 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -105,26 +108,20 @@ public class ChatView {
             for (ChatDetail detail : changelist.getList()) {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
-                    TextArea textArea = new TextArea();
-                    textArea.setText(detail.getContent());
-                    textArea.setEditable(false);
-                    textArea.setWrapText(true);
-                    textArea.setBorder(Border.EMPTY);
-                    textArea.setStyle(
+                    double textW = computeTextWidth(detail.getContent());
+                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
+
+                    Label label = new Label(detail.getContent());
+                    label.setWrapText(true);
+                    label.setMaxWidth(bubbleW);
+                    label.setStyle(
                             "-fx-background-color: #3498db;" +
                                     "-fx-background-radius: 16;" +
                                     "-fx-padding: 10 14 10 14;" +
                                     "-fx-text-fill: white;" +
                                     "-fx-font-size: 14px;"
                     );
-                    double textW = computeTextWidth(detail.getContent());
-                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
-                    double textH = computeTextHeight(detail.getContent(), bubbleW - 28);
-                    textArea.setPrefWidth(bubbleW);
-                    textArea.setMaxWidth(bubbleW);
-                    textArea.setPrefHeight(textH + 20);
-                    textArea.setMaxHeight(textH + 20);
-                    HBox bubbleBox = new HBox(textArea);
+                    HBox bubbleBox = new HBox(label);
                     bubbleBox.setAlignment(Pos.CENTER_RIGHT);
                     vBox.getChildren().add(bubbleBox);
                 } else {
