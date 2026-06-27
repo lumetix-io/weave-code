@@ -5,11 +5,11 @@ import com.lumetix.entity.chat.ChatEnum;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
+import static com.lumetix.entity.BasicConstants.InPutUi.TEXTAREA_HEIGHT;
 import static com.lumetix.entity.BasicConstants.InPutUi.TEXTAREA_WIDTH;
 import static com.lumetix.ui.content.basicInputview.InputView.newInputViewWithBorder;
 
@@ -45,15 +46,39 @@ public class ChatView {
         RENDERER = HtmlRenderer.builder().extensions(extensions).build();
     }
 
-    public static BorderPane newChatViewWrapper() {
-        StackPane input = newInputViewWithBorder();
-        BorderPane chatView = new BorderPane();
-        chatView.setBottom(input);
-        chatView.setCenter(newChatView());
-        chatView.setMaxWidth(CHAT_VIEW_WIDTH);
+//    public static BorderPane newChatViewWrapper() {
+//        StackPane input = newInputViewWithBorder();
+//        BorderPane chatView = new BorderPane();
+//        chatView.setBottom(input);
+//        chatView.setCenter(newChatView());
+//        chatView.setMaxWidth(CHAT_VIEW_WIDTH);
+//
+//        chatView.setPadding(new Insets(10, 0, 10, 0));
+//        return chatView;
+//    }
 
-        chatView.setPadding(new Insets(10, 0, 10, 0));
-        return chatView;
+
+    public static StackPane newChatViewWrapper() {
+
+        StackPane rootContent = new StackPane();
+
+        StackPane chatList = new StackPane();
+        chatList.setAlignment(Pos.TOP_CENTER);
+        chatList.getChildren().add(newChatView());
+        rootContent.getChildren().add(chatList);
+
+
+        StackPane inputView = new StackPane();
+        inputView.setAlignment(Pos.BOTTOM_CENTER);
+        inputView.setBackground(Background.fill(Color.TRANSPARENT));
+        StackPane input = newInputViewWithBorder();
+        input.setMaxWidth(TEXTAREA_WIDTH);
+        input.setMaxHeight(TEXTAREA_HEIGHT);
+        inputView.getChildren().add(input);
+
+        rootContent.getChildren().add(inputView);
+
+        return rootContent;
     }
 
 
@@ -76,10 +101,10 @@ public class ChatView {
                     textArea.setBorder(Border.EMPTY);
                     textArea.setStyle(
                             "-fx-background-color: #3498db;" +
-                            "-fx-background-radius: 16;" +
-                            "-fx-padding: 10 14 10 14;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-size: 14px;"
+                                    "-fx-background-radius: 16;" +
+                                    "-fx-padding: 10 14 10 14;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-size: 14px;"
                     );
                     double textW = computeTextWidth(detail.getContent());
                     double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
