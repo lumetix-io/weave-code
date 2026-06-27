@@ -98,7 +98,7 @@ public class ChatManager {
             }
         }).onCompleteResponse(response -> {
             saveRobotAnswer(response.aiMessage().text());
-            isExecuteTask.set(false);
+            Platform.runLater(() -> isExecuteTask.set(false));
             System.out.println("=======>," + response.aiMessage().text());
         }).onError(e -> {
             System.out.println("-------->" + e.getMessage());
@@ -119,18 +119,39 @@ public class ChatManager {
 
     private static ChatDetail saveRobotAnswer(String content) {
         ChatDetail chatDetail = getRobotChat(content);
-        getJdbi().useHandle(handle ->
+        getJdbi().useHandle(handle -> {
+            Integer count = handle.createQuery("""
+                            SELECT COUNT(*) FROM chat_detail
+                            WHERE uuid = :uuid AND type = :type AND chat_id = :chatId AND deleted_at IS NULL
+                            """)
+                    .bind("uuid", chatDetail.getUuid())
+                    .bind("type", ChatEnum.ROBOT.name())
+                    .bind("chatId", chatDetail.getChatId())
+                    .mapTo(Integer.class)
+                    .one();
+            if (count > 0) {
+                handle.createUpdate("""
+                                UPDATE chat_detail
+                                SET content = :content, update_at = datetime('now', 'localtime')
+                                WHERE uuid = :uuid AND type = :type AND chat_id = :chatId AND deleted_at IS NULL
+                                """)
+                        .bind("content", chatDetail.getContent())
+                        .bind("uuid", chatDetail.getUuid())
+                        .bind("type", ChatEnum.ROBOT.name())
+                        .bind("chatId", chatDetail.getChatId())
+                        .execute();
+            } else {
                 handle.createUpdate("""
                                 INSERT INTO chat_detail (chat_id, type, content, uuid)
                                 VALUES (:chatId, :type, :content, :uuid)
-                                ON CONFLICT(chat_id, type,uuid) WHERE type = 'ROBOT' AND deleted_at IS NULL
-                                DO UPDATE SET content = :content, uuid = :uuid, update_at = datetime('now', 'localtime')
                                 """)
                         .bind("chatId", chatDetail.getChatId())
                         .bind("type", ChatEnum.ROBOT.name())
                         .bind("content", chatDetail.getContent())
                         .bind("uuid", chatDetail.getUuid())
-                        .execute());
+                        .execute();
+            }
+        });
         return chatDetail;
     }
 
