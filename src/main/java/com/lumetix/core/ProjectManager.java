@@ -39,9 +39,9 @@ public class ProjectManager {
                                     item.getParentId()).
                             mapToBean(QuestEntity.class).
                             findOne().orElse(null)));
+            chatModel.setValue(true);
             refreshChatDataByChatId(item.getId());
             curTaskId.set(item.getId());
-            chatModel.setValue(true);
         }
         List<Long> ids = Arrays.asList(item.getId(), queryCurProject.getId());
         getJdbi().useHandle(handle ->

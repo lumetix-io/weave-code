@@ -60,11 +60,13 @@ public class ChatView {
         ScrollPane scrollPane = new ScrollPane();
         VBox vBox = new VBox();
         chatList.addListener((_, _, newValue) -> {
+            System.out.println("+++++++++" + newValue.size());
             if (newValue.isEmpty()) {
                 vBox.getChildren().clear();
             }
         });
         chatList.addListener((ListChangeListener<ChatDetail>) changelist -> {
+            System.out.println("-------------" + changelist.getList().size());
             for (ChatDetail detail : changelist.getList()) {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
