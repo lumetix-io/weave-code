@@ -5,6 +5,7 @@ import com.lumetix.entity.chat.ChatEnum;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -82,6 +83,7 @@ public class ChatView {
 //        scrollPane.setBackground(Background.fill(Color.BLUE));
         // scrollPane.setMaxWidth(CHAT_VIEW_WIDTH);
         VBox vBox = new VBox();
+        vBox.setPadding(new Insets(0, 0, TEXTAREA_HEIGHT, 0));
         vBox.setMaxWidth(CHAT_VIEW_WIDTH);
         stackPane.getChildren().add(vBox);
         vBox.setBackground(Background.fill(Color.TRANSPARENT));
