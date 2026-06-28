@@ -87,6 +87,7 @@ public class ChatManager {
         String uuid = chatSendUUid.get();
         UserFaceChatAssistant userFaceChatAssistant = newChatAssistant(ModelEnum.QIANWEN37MAX);
         userFaceChatAssistant.chat(msg, LocalDate.now()).onPartialResponse(response -> {
+            System.out.println("**********>," + response);
             ChatDetail last = chatList.getLast();
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
