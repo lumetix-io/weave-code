@@ -130,6 +130,9 @@ public class ChatView {
         webView.setPrefWidth(CHAT_VIEW_WIDTH);
         webView.setMaxWidth(CHAT_VIEW_WIDTH);
         webView.setMinWidth(CHAT_VIEW_WIDTH);
+        webView.setPrefHeight(0);
+        webView.setMinHeight(0);
+        webView.setMaxHeight(0);
         String fullHtml = "<html><head><style>"
                 + "body { margin: 0; padding: 8px; font-size: 14px; overflow: hidden; }"
                 + "img { max-width: 100%; height: auto; }"
