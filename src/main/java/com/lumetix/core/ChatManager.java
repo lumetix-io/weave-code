@@ -87,12 +87,14 @@ public class ChatManager {
         String uuid = chatSendUUid.get();
         UserFaceChatAssistant userFaceChatAssistant = newChatAssistant(ModelEnum.QIANWEN37MAX);
         userFaceChatAssistant.chat(msg, LocalDate.now()).onPartialResponse(response -> {
-            System.out.println("**********>," + response);
             ChatDetail last = chatList.getLast();
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
                 last.setContent(last.getContent() + response);
-                Platform.runLater(() -> chatViewRefresh.set(chatViewRefresh.getValue() + 1));
+                Platform.runLater(() -> {
+                    chatList.removeLast();
+                    chatList.addLast(last);
+                });
             } else {
                 ChatDetail robotChat = getRobotChat(response);
                 Platform.runLater(() -> chatList.addLast(robotChat));
@@ -100,9 +102,7 @@ public class ChatManager {
         }).onCompleteResponse(response -> {
             saveRobotAnswer(response.aiMessage().text());
             Platform.runLater(() -> isExecuteTask.set(false));
-            System.out.println("=======>," + response.aiMessage().text());
         }).onError(e -> {
-            System.out.println("-------->" + e.getMessage());
             Platform.runLater(() -> isExecuteTask.set(false));
         }).start();
     }

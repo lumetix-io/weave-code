@@ -86,58 +86,72 @@ public class ChatView {
             if (newValue.isEmpty()) {
                 vBox.getChildren().clear();
             }
+            scrollPane.setVvalue(1.0);
         });
         chatList.addListener((ListChangeListener<ChatDetail>) changelist -> {
             while (changelist.next()) {
-                List<? extends ChatDetail> addedSubList = changelist.getAddedSubList();
-                if (addedSubList.isEmpty()) {
-                    return;
+                if (changelist.wasRemoved()) {
+                    int size = vBox.getChildren().size();
+                    if (size > 0) {
+                        vBox.getChildren().removeLast();
+                    }
                 }
-                for (ChatDetail detail : addedSubList) {
+                if (changelist.wasAdded()) {
+                    List<? extends ChatDetail> addedSubList = changelist.getAddedSubList();
+                    if (addedSubList.isEmpty()) {
+                        return;
+                    }
+                    for (ChatDetail detail : addedSubList) {
 
-                    String type = detail.getType();
-                    if (type.equals(ChatEnum.USER.name())) {
+                        String type = detail.getType();
+                        if (type.equals(ChatEnum.USER.name())) {
 
-                        HBox bubbleBox = getHBox(detail);
-                        vBox.getChildren().add(bubbleBox);
-                    } else {
-                        Node document = PARSER.parse(detail.getContent());
-
-                        // 5. 将 AST 渲染为 HTML 字符串
-                        String html = RENDERER.render(document);
-
-                        WebView webView = new WebView();
-                        webView.setPrefWidth(CHAT_VIEW_WIDTH);
-                        webView.setMaxWidth(CHAT_VIEW_WIDTH);
-                        webView.setMinWidth(CHAT_VIEW_WIDTH);
-                        String fullHtml = "<html><head><style>"
-                                + "body { margin: 0; padding: 8px; font-size: 14px; overflow: hidden; }"
-                                + "img { max-width: 100%; height: auto; }"
-                                + "pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }"
-                                + "table { max-width: 100%; word-break: break-all; }"
-                                + "</style></head><body><div id='content'>" + html + "</div></body></html>";
-                        webView.getEngine().loadContent(fullHtml);
-                        webView.getEngine().getLoadWorker().stateProperty().addListener((obs, o, n) -> {
-                            if (n == Worker.State.SUCCEEDED) {
-                                Platform.runLater(() -> Platform.runLater(() -> {
-                                    Object result = webView.getEngine()
-                                            .executeScript("document.getElementById('content').offsetHeight");
-                                    if (result instanceof Number) {
-                                        double h = ((Number) result).doubleValue() + 16;
-                                        webView.setPrefHeight(h);
-                                        webView.setMinHeight(h);
-                                        webView.setMaxHeight(h);
-                                    }
-                                }));
-                            }
-                        });
-                        vBox.getChildren().add(webView);
+                            HBox bubbleBox = getHBox(detail);
+                            vBox.getChildren().add(bubbleBox);
+                        } else {
+                            WebView webView = newRobotWebView(detail);
+                            vBox.getChildren().add(webView);
+                        }
                     }
                 }
             }
         });
         scrollPane.setContent(stackPane);
         return scrollPane;
+    }
+
+    public static WebView newRobotWebView(ChatDetail detail) {
+        Node document = PARSER.parse(detail.getContent());
+
+        // 5. 将 AST 渲染为 HTML 字符串
+        String html = RENDERER.render(document);
+
+        WebView webView = new WebView();
+        webView.setPrefWidth(CHAT_VIEW_WIDTH);
+        webView.setMaxWidth(CHAT_VIEW_WIDTH);
+        webView.setMinWidth(CHAT_VIEW_WIDTH);
+        String fullHtml = "<html><head><style>"
+                + "body { margin: 0; padding: 8px; font-size: 14px; overflow: hidden; }"
+                + "img { max-width: 100%; height: auto; }"
+                + "pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }"
+                + "table { max-width: 100%; word-break: break-all; }"
+                + "</style></head><body><div id='content'>" + html + "</div></body></html>";
+        webView.getEngine().loadContent(fullHtml);
+        webView.getEngine().getLoadWorker().stateProperty().addListener((obs, o, n) -> {
+            if (n == Worker.State.SUCCEEDED) {
+                Platform.runLater(() -> Platform.runLater(() -> {
+                    Object result = webView.getEngine()
+                            .executeScript("document.getElementById('content').offsetHeight");
+                    if (result instanceof Number) {
+                        double h = ((Number) result).doubleValue() + 16;
+                        webView.setPrefHeight(h);
+                        webView.setMinHeight(h);
+                        webView.setMaxHeight(h);
+                    }
+                }));
+            }
+        });
+        return webView;
     }
 
     private static HBox getHBox(ChatDetail detail) {
