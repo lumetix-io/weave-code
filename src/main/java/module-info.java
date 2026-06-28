@@ -17,6 +17,7 @@ module com.lumetix.weave_code {
     requires org.commonmark.ext.autolink;
     requires org.jspecify;
 
+
     // 导出包给 JavaFX 使用
     exports com.lumetix to javafx.graphics;
     exports com.lumetix.ai to javafx.graphics;
@@ -24,6 +25,7 @@ module com.lumetix.weave_code {
     opens com.lumetix.entity.tree to org.jdbi.v3.core;
     opens com.lumetix.entity.chat to org.jdbi.v3.core;
     opens com.lumetix.entity.model to org.jdbi.v3.core;
+    opens com.lumetix.ai.tool to langchain4j;
     exports com.lumetix.ai.assistant.factory to javafx.graphics;
     exports com.lumetix.ai.assistant.embed to javafx.graphics;
 }
