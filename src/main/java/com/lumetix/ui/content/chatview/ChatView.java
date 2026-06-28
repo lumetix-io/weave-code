@@ -14,8 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import org.commonmark.Extension;
 import org.commonmark.ext.autolink.AutolinkExtension;
@@ -79,9 +77,6 @@ public class ChatView {
         scrollPane.setFitToWidth(true);
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.TOP_CENTER);
-//        stackPane.setBackground(Background.fill(Color.GREEN));
-//        scrollPane.setBackground(Background.fill(Color.BLUE));
-        // scrollPane.setMaxWidth(CHAT_VIEW_WIDTH);
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(0, 0, TEXTAREA_HEIGHT, 0));
         vBox.setMaxWidth(CHAT_VIEW_WIDTH);
@@ -154,24 +149,5 @@ public class ChatView {
         HBox bubbleBox = new HBox(label);
         bubbleBox.setAlignment(Pos.CENTER_RIGHT);
         return bubbleBox;
-    }
-
-    private static double computeTextWidth(String text) {
-        Text helper = new Text();
-        helper.setFont(Font.font(14));
-        double maxW = 0;
-        for (String line : text.split("\n")) {
-            helper.setText(line);
-            maxW = Math.max(maxW, helper.getLayoutBounds().getWidth());
-        }
-        return maxW;
-    }
-
-    private static double computeTextHeight(String text, double wrapWidth) {
-        Text helper = new Text();
-        helper.setFont(Font.font(14));
-        helper.setWrappingWidth(wrapWidth);
-        helper.setText(text);
-        return helper.getLayoutBounds().getHeight();
     }
 }
