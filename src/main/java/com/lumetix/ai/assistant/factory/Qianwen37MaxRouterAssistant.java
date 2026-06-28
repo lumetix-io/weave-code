@@ -1,5 +1,6 @@
 package com.lumetix.ai.assistant.factory;
 
+import com.lumetix.ai.tool.SystemTool;
 import com.lumetix.entity.model.ModelEnum;
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -22,6 +23,7 @@ public class Qianwen37MaxRouterAssistant implements IChatAssistant {
                 .build();
         return AiServices.builder(UserFaceChatAssistant.class)
                 .streamingChatModel(streamingChatModel)
+                .tools(new SystemTool())
                 // .tools(new TicketToolManager())
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder().id(memoryId).maxMessages(1000).build())
                 .build();
