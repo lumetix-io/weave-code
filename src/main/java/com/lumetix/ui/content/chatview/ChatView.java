@@ -91,8 +91,6 @@ public class ChatView {
             for (ChatDetail detail : changelist.getList()) {
                 String type = detail.getType();
                 if (type.equals(ChatEnum.USER.name())) {
-//                    double textW = computeTextWidth(detail.getContent());
-//                    double bubbleW = Math.min(textW + 32, CHAT_VIEW_WIDTH * 0.75);
 
                     HBox bubbleBox = getHBox(detail);
                     vBox.getChildren().add(bubbleBox);
