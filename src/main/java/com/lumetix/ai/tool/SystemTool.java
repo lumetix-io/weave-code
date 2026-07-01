@@ -24,7 +24,7 @@ public class SystemTool {
     }
 
     @Tool("获取当前操作系统信息，包含系统类型、版本、架构")
-    public String getSystemInfo() {
+    public String getOperatingSystemInfo() {
         return String.format("类型: %s | 系统: %s | 版本: %s | 架构: %s",
                 OS_TYPE, OS_NAME, OS_VERSION, OS_ARCH);
     }

@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class JavaTool {
 
     @Tool("获取当前系统上安装的java运行环境的版本号")
-    public String getSystemInfo() {
+    public String getJavaVersion() {
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"java", "-version"});
             String version = new BufferedReader(new InputStreamReader(p.getErrorStream()))
