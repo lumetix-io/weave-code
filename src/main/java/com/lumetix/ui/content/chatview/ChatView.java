@@ -25,6 +25,8 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.lumetix.entity.BasicConstants.ChatUi.chatList;
 import static com.lumetix.entity.BasicConstants.InPutUi.TEXTAREA_HEIGHT;
@@ -37,6 +39,7 @@ public class ChatView {
     private static final Parser PARSER;
     private static final HtmlRenderer RENDERER;
     private static final double CHAT_VIEW_WIDTH = TEXTAREA_WIDTH;
+    private static final Map<String, WebView> ROBOT_WEBVIEW_MAP = new ConcurrentHashMap<>();
 
     static {
         List<Extension> extensions = Arrays.asList(
@@ -85,17 +88,21 @@ public class ChatView {
         chatList.addListener((_, _, newValue) -> {
             if (newValue.isEmpty()) {
                 vBox.getChildren().clear();
+                ROBOT_WEBVIEW_MAP.clear();
             }
             scrollPane.setVvalue(1.0);
         });
         chatList.addListener((ListChangeListener<ChatDetail>) changelist -> {
             while (changelist.next()) {
-                if (changelist.wasRemoved()) {
-                    int size = vBox.getChildren().size();
-                    if (size > 0) {
-                        vBox.getChildren().removeLast();
-                    }
-                }
+//                if (changelist.wasRemoved()) {
+//                    for (ChatDetail removed : changelist.getRemoved()) {
+//                        ROBOT_WEBVIEW_MAP.remove(removed.getUuid());
+//                    }
+//                    int size = vBox.getChildren().size();
+//                    if (size > 0) {
+//                        vBox.getChildren().removeLast();
+//                    }
+//                }
                 if (changelist.wasAdded()) {
                     List<? extends ChatDetail> addedSubList = changelist.getAddedSubList();
                     if (addedSubList.isEmpty()) {
@@ -110,6 +117,7 @@ public class ChatView {
                             vBox.getChildren().add(bubbleBox);
                         } else {
                             WebView webView = newRobotWebView(detail);
+                            ROBOT_WEBVIEW_MAP.put(detail.getUuid(), webView);
                             vBox.getChildren().add(webView);
                         }
                     }
@@ -155,6 +163,31 @@ public class ChatView {
             }
         });
         return webView;
+    }
+
+    public static void updateStreamingContent(ChatDetail detail) {
+        WebView webView = ROBOT_WEBVIEW_MAP.get(detail.getUuid());
+        if (webView == null) {
+            return;
+        }
+        Node document = PARSER.parse(detail.getContent());
+        String html = RENDERER.render(document);
+        String escapedHtml = html.replace("\\", "\\\\")
+                .replace("'", "\\'")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
+        Platform.runLater(() -> {
+            webView.getEngine().executeScript(
+                    "document.getElementById('content').innerHTML = '" + escapedHtml + "';");
+            Object result = webView.getEngine()
+                    .executeScript("document.getElementById('content').offsetHeight");
+            if (result instanceof Number) {
+                double h = ((Number) result).doubleValue() + 16;
+                webView.setPrefHeight(h);
+                webView.setMinHeight(h);
+                webView.setMaxHeight(h);
+            }
+        });
     }
 
     private static HBox getHBox(ChatDetail detail) {

@@ -5,6 +5,7 @@ import com.lumetix.entity.chat.ChatDetail;
 import com.lumetix.entity.chat.ChatEnum;
 import com.lumetix.entity.model.ModelEnum;
 import com.lumetix.entity.tree.QuestEntity;
+import com.lumetix.ui.content.chatview.ChatView;
 import javafx.application.Platform;
 
 import java.time.LocalDate;
@@ -91,10 +92,7 @@ public class ChatManager {
             String contentUuid = last.getUuid();
             if (uuid.equals(contentUuid)) {
                 last.setContent(last.getContent() + response);
-                Platform.runLater(() -> {
-                    chatList.removeLast();
-                    chatList.addLast(last);
-                });
+                Platform.runLater(() -> ChatView.updateStreamingContent(last));
             } else {
                 ChatDetail robotChat = getRobotChat(response);
                 Platform.runLater(() -> chatList.addLast(robotChat));
